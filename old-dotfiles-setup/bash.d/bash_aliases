@@ -1,0 +1,66 @@
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# For changing to frequently used directories:
+alias cdlat='cd ~/pub/research/LatticeTheory/DeMeo'
+alias cdfin='cd ~/pub/DeMeo/research/Finance'
+alias cdsup='cd ~/pub/DeMeo/classes/StanfordCS184'
+alias cdufsrc='cd ~/git/lab/wjd/UF-Agda_wjd/src'
+alias cduf='cd ~/git/lab/wjd/UF-Agda_wjd'
+alias cdhott='cd ~/git/hub/AGDA/HoTT'
+# For identifying large sub directories
+alias dum='du --max-depth=1 -h | grep M'
+alias dug='du --max-depth=1 -h | grep G'
+
+# For removing extraneous files produced by LaTeX:
+alias rmtex='rm -f *.out *.aux *.blg *.log *.toc *.idx *.lof *.ilg *.fdb_latexmk *.fls *.synctex.gz *.blg'
+
+# For removing files produced by emacs:
+alias rmt='\rm *~'
+
+# For turning off trackpad on laptops
+alias padoff='xinput set-prop 13 "Device Enabled" 0'
+alias padon='xinput set-prop 13 "Device Enabled" 1'
+
+
+# 2.1) Safety
+alias rm="rm -i"
+alias mv="mv -i"
+alias cp="cp -i"
+set -o noclobber
+
+# 2.2) Listing, directories, and motion
+# some more ls aliases
+alias lss='ls -lSha'
+alias ll="ls -alrtFh --color"
+alias la="ls -A"
+alias l="ls -CF"
+alias dir='ls --color=auto --format=vertical'
+alias vdir='ls --color=auto --format=long'
+alias m='less'
+alias ..='cd ..'
+alias ...='cd ..;cd ..'
+alias md='mkdir'
+alias cl='clear'
+alias treeacl='tree -A -C -L 2'
+
+# 2.3) Text and editor commands
+alias em='emacs -nw'     # No X11 windows
+alias eqq='emacs -nw -Q' # No config and no X11
+
+function setzoom() { gsettings set org.gnome.desktop.interface text-scaling-factor "$@"; }
+
+# For mounting a Nexus 4; see http://youtu.be/fw2MKGIgyF4
+# and http://www.omgubuntu.co.uk/2013/06/mount-nexus-4-on-ubuntu
+#    alias mountnexus="sudo mtpfs -o allow_other /media/nexus4"
+#    alias umountnexus="sudo umount /media/nexus4"
+# No longer using this method. Instead, see:
+# http://blog.sukria.net/2013/03/09/support-for-nexus-4-in-ubuntu-12-10/
+alias beep="paplay /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg"
+alias huburl="git remote set-url origin git@github.com:ualib/ualib.github.io.git"
+alias laburl="git remote set-url origin git@gitlab.com:ualib/ualib.gitlab.io.git"
+alias hysurl="git remote set-url origin git@gitlab.com:wjd-hys/ualib.gitlab.io.git"
+alias tg="telegram"
+
+alias cdalg='cd ~/git/hub/williamdemeo/agda-algebras'
