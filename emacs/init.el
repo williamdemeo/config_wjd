@@ -26,6 +26,10 @@
 
 ;; Avoid garbage collection during startup.
 ;; see `SPC h . dotspacemacs-gc-cons' for more info
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; BEGIN: spacemacs default configuration options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst emacs-start-time (current-time))
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6)
 (load (concat (file-name-directory load-file-name) "core/core-load-paths")
@@ -73,47 +77,44 @@
       (unless (server-running-p)
         (message "Starting a server...")
         (server-start)))))
-
-
-;; AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; TODO: Fix this so we can toggle between then instead of using comments.
-;; For now, there are two lines, marked with ***, that can be adjusted by hand to switch
-;; between alternative Agda setups.
-;;
-;; *** Edit this `setq load-path` line --------
-;;   For agda-algebras:
-     (setq load-path (cons "~/.cabal/bin" load-path))
-;;   For formal-ledger-specifications: (setq load-path (cons "~/git/hub/IO/ledger-agda/bin" load-path))
-;;   For UALib: (setq load-path (cons "~/git/lab/wjd/UF-Agda_wjd/agda/.cabal-sandbox/bin" load-path))
-;; ----------------------------------------
-;;
-(setenv "LD_LIBRARY_PATH"
-  (let ((current (getenv "LD_LIBRARY_PATH"))
-;;
-;; *** Edit this line ----------
-;;   For agda-algebras:
-        (new "/usr/local/lib:~/.cabal/lib"))
-;;   For formal-ledger-specifications:   (new "/usr/local/lib:~/git/hub/IO/ledger-agda/bin"))
-;;   For UALib: (new "/usr/local/lib:~/git/lab/wjd/UF-Agda_wjd/agda/.cabal-sandbox/bin"))
-;; -------------------------
-;;
-(if current (concat new ":" current) new)))
-  (load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
-  (set-fontset-font "fontset-default" nil
-                  (font-spec :name "DejaVu Sans"))
-  (setq auto-mode-alist
-    (append
-     '(("\\.agda\\'" . agda2-mode)
-       ("\\.lagda.md\\'" . agda2-mode))
-     auto-mode-alist))
-  (add-hook 'agda2-mode-hook (lambda ()
-       (setq smartparens-mode nil)
-       (setq electric-indent-mode nil) ) )
-;;
-;; '(agda2-include-dirs (quote ("." "~/git/lab/ualib/ualib.gitlab.io/UALib")))
-;; end AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; END: spacemacs default configuration options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (require 'ag)
+
+(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+(autoload 'flyspell-delay-command "flyspell" "Delay on command." t) (autoload 'tex-mode-flyspell-verify "flyspell" "" t)
+
+(set-fontset-font "fontset-default" nil
+                  (font-spec :name "DejaVu Sans"))
+
+;; AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ( ;; BEGIN: setenv
+;;  setenv "LD_LIBRARY_PATH"
+;;   (let ((current (getenv "LD_LIBRARY_PATH"))))
+;; *** Edit this line ----------
+;;   For agda-algebras: (new "/usr/local/lib:~/.cabal/lib")
+;;   For UALib: (new "/usr/local/lib:~/git/lab/wjd/UF-Agda_wjd/agda/.cabal-sandbox/bin"))
+;;   For formal-ledger-specifications:
+;;       (new "/usr/local/lib:~/IOHK/ledger-agda/bin")
+;; ) ;; END: setenv
+
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+
+(add-hook 'agda2-mode-hook (lambda ()
+                             (setq smartparens-mode nil)
+                             (setq electric-indent-mode nil)))
+
+(setq my/ledger-agda-name "~/IOHK/ledger-agda")
+(defun my/toggle-ledger-agda ()
+  (interactive)
+  (if (string-equal agda2-program-name "agda")
+      (setq agda2-program-name (concat my/ledger-agda-name "/bin/agda"))
+    (setq agda2-program-name "agda"))
+  (agda2-restart))
+(with-eval-after-load 'agda2-mode (define-key agda2-mode-map (kbd "C-c C-x C-t") 'my/toggle-ledger-agda))
+
+
