@@ -17,4 +17,7 @@
 [includeIf "gitdir:~/git/hub/IO/"]
   path = ~/.config/git/gitconfig-io
 
+[includeIf "gitdir:~/IOHK/"]
+  path = ~/.config/git/gitconfig-io
+
 
