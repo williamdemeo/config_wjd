@@ -24,8 +24,8 @@ CABAL_PATH=$HOME/.cabal/bin
 export PATH=$CABAL_PATH:$PATH
 
 # For formal-ledger-specifications: 
-# NIX_PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/home/williamdemeo/git/hub/IO/ledger-agda/bin
-# export PATH=$NIX_PATH:$PATH
+NIXPATH=$HOME/.nix-profile/bin:/home/williamdemeo/IOHK/ledger-agda/bin
+export PATH=$NIXPATH:$PATH
 
 # opam configuration:
 test -r $HOME/.opam/opam-init/init.sh && . $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
