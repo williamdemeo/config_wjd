@@ -2,6 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# When configuration is changed, rerun `nixos-rebuild switch`.
+
 { config, pkgs, ... }:
 
 {
@@ -87,7 +89,7 @@
 
   # List packages installed in system profile. To search, run:
   # `nix search wget` or `nix-env -qaP wget`
-  environment.systemPackages = with pkgs; [ wget zsh meld git emacs ];
+  environment.systemPackages = with pkgs; [ wget zsh meld git emacs silver-searcher ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.williamdemeo = {
