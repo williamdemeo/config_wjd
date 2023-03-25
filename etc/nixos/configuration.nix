@@ -4,7 +4,8 @@
 
 # When configuration is changed, rerun `nixos-rebuild switch`.
 
-{ config, pkgs, ... }:
+
+{ config, pkgs, callPackages, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -20,7 +21,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "alonzo";       # after F1 driver Fernando (not Church) 
+
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -55,6 +57,11 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  # services.xserver.windowManager.xmonad = {
+  #   enable = true;
+  #   enableContribAndExtras = true;
+  # };
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -63,6 +70,16 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # Enable fingerprint reader: login/unlock with fingerprint; add one with `fprintd-enroll`
+  services.fprintd.enable = true;
+  # services.fprintd.tod.enable = true;
+  # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
+  # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+  # security.pam.services.login.fprintAuth = true;
+  # security.pam.services.xscreensaver.fprintAuth = true;
+  # similarly for other PAM providers
+
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -87,11 +104,54 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # `nix search wget` or `nix-env -qaP wget`
-  environment.systemPackages = with pkgs; [ wget zsh meld git emacs silver-searcher ];
+  # -- Doom Emacs -----------------------------------------------------------------
+  # see: https://github.com/nix-community/emacs-overlay#quickstart
+  # services.emacs.package = pkgs.emacsUnstable;
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball https://github.com/nix-community/emacs-overlay/archive/master.tar.gz))
+  ];
+  # -------------------------------------------------------------------------------
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+
+  # List packages installed in system profile. To search: `nix search wget` or `nix-env -qaP wget`
+  environment.systemPackages = with pkgs; [ 
+    wget
+    zsh 
+    meld 
+    git 
+    ripgrep 
+    silver-searcher 
+    rlwrap 
+    direnv 
+    emacs
+    coreutils
+    fd
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+    cmake
+    gnumake
+    cabal-install
+    ghc
+    nodejs
+    nixfmt
+    shellcheck
+  ];
+
+  # FONTS
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+  ];
+
+
+  # Define a user account.
   users.users.williamdemeo = {
     isNormalUser = true;
     description = "William DeMeo";
@@ -99,6 +159,9 @@
     shell = pkgs.zsh;
     packages = with pkgs; [ firefox tdesktop starship ];
   };
+
+  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # see https://nixos.wiki/wiki/Slack
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -127,10 +190,31 @@
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
+  # Enable automatic weekly garbage collection (gc).
+
+  nix.gc = {
+                  automatic = true;
+                  dates = "weekly";
+                  options = "--delete-older-than 7d";
+           };
+
+
+  # After `sudo nixos-rebuild switch`, check gc is running: `systemctl list-timers`.
+
+
+  # Reduce "swappiness".
+
+  boot.kernel.sysctl = { "vm.swappiness" = 10;};
+
+  # After `sudo nixos-rebuild switch`, check swappiness: `cat /proc/sys/vm/swappiness`.
+
+
+
 }
+
