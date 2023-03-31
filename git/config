@@ -12,7 +12,8 @@
   autoSetupRemote = true
 [pull]
   rebase = false
-
+[init]
+  defaultBranch = main
 
 [includeIf "gitdir:~/git/hub/IO/"]
   path = ~/.config/git/gitconfig-io
