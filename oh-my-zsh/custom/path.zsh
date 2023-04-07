@@ -1,5 +1,5 @@
 # bin and sbin paths
-HOME_PATH=$HOME/bin:$HOME/.local/bin
+HOME_PATH=$HOME/bin:$HOME/.local/bin:$HOME/.config/emacs/bin
 BIN_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 
 # Paths to various Node versions

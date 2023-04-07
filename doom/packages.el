@@ -15,6 +15,16 @@
 ;(package! another-package
 ;  :recipe (:host github :repo "username/repo"))
 
+;; (package! blamer)
+;; or
+(package! blamer :recipe (:host github :repo "artawower/blamer.el"))
+
+(package! font-utils)
+(package! ucs-utils)
+(package! list-utils)
+(package! unicode-fonts)
+(package! nix-update)
+
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify
 ;; `:files' in the `:recipe':

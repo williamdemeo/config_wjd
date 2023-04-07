@@ -3,6 +3,8 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+(setq smartparens-mode nil)  ;; I can't stand smartparens!
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -21,8 +23,24 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;; (setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;(add-to-list 'load-path "~/.local/straight/build-28.2/unicode-fonts")
+;;(require 'unicode-fonts)
+;;(unicode-fonts-setup)
+;;(require 'font-utils)
+;;(font-utils-exists-p "Courier")
+
+;;(set-fontset-font "fontset-default" nil
+;;                (font-spec :name "DejaVu Sans"))
+
+
+;;(setq doom-unicode-font (font-spec :family "Fira Mono"))
+
+
+;(setq
+;  doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;  doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13)
+;  doom-unicode-font (font-spec :family "Fira Mono")
+;)
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -33,7 +51,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one)
-(setq doom-theme 'doom-dark+)
+; (setq doom-theme 'doom-dark+)
+(setq doom-theme 'doom-zenburn)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -80,7 +99,10 @@
 
 (add-hook 'agda2-mode-hook (lambda ()
                              (setq smartparens-mode nil)
-                             (setq electric-indent-mode nil)))
+                             (setq electric-indent-mode nil)
+                              C-c l f         agda2-next-goal
+
+                             ))
 
 (setq my/ledger-agda-name "~/IOHK/ledger-agda")
 (defun my/toggle-ledger-agda ()
@@ -90,3 +112,21 @@
     (setq agda2-program-name "agda"))
   (agda2-restart))
 (with-eval-after-load 'agda2-mode (define-key agda2-mode-map (kbd "C-c C-x C-t") 'my/toggle-ledger-agda))
+
+
+
+;; git blamer mode
+;;
+(use-package blamer
+  :bind (("s-i" . blamer-show-commit-info))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  ;; :custom-face
+  ;; (blamer-face ((t :foreground "#7a88cf"
+  ;;                   :background nil
+  ;;                   :height 140
+  ;;                   :italic t)))
+  :config
+  (global-blamer-mode 1))
