@@ -11,18 +11,44 @@ custom setup.
 
 1. Clone the (custom fork of the) oh-my-zsh repository into the `~/.config` directory.
 
-   ```sh
+   ```shell
    git clone git@github.com:williamdemeo/ohmyzsh.git ~/.config/oh-my-zsh
    ```
 
-2. Backup your existing `~/.zshrc` file and replace it with a link to the custom template.
+2. Run the oh-my-zsh install script.
+
+   ```shell
+   ~/.config/oh-my-zsh/tools/install.sh
+   ```
+   
+3. Ensure your `ZSH_CUSTOM` environment variable was set correctly.
+
+   ```shell
+   echo $ZSH_CUSTOM
+   ```
+   It should show `~/.config/oh-my-zsh/custom`, or similar.
+   
+   If not, then probably something went wrong above, but for now you could try to remedy this by invoking
+   
+   ```shell
+   export ZSH_CUSTOM=~/.config/oh-my-zsh/custom
+   ```
+
+4. Add autosuggestions and syntax highlighting plugins.
+
+   ```sh
+   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
+   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+   ```
+
+5. Backup your existing `~/.zshrc` file and replace it with a link to the custom template.
 
    ```sh
    cp ~/.zshrc ~/.zshrc.orig
    ln -s ~/.config/oh-my-zsh/templates/zshrc.wjd-template ~/.zshrc
    ```
 
-3. Change your default shell
+6. Change your default shell
 
    ```sh
    chsh -s $(which zsh)
@@ -30,6 +56,7 @@ custom setup.
 
    (You must log out from your user session and log back in to see this change.)
    
+
 ## Install a customized fork of doom emacs 
 
 ``` sh
