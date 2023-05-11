@@ -67,5 +67,20 @@ doom doctor   # check that everything is okay
 ```
 
 
+## Troubleshoting on Mac
+
+For the above to work on Mac, you likely have to install some standard programs.
+
+For example, do some or all of the following, as necessary.
+
+```shell
+brew install niv gh rg fd shellcheck rlwrap ag
+brew install --cask gcs
+brew install cmake npm nodejs nvm
+brew install nix
+nix-env -iA nixpkgs.haskellPackages.hoogle
+```
+
+
 
 
