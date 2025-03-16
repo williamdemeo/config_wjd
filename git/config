@@ -15,7 +15,7 @@
 [init]
   defaultBranch = main
 
-[includeIf "gitdir:~/git/hub/IO/"]
+[includeIf "gitdir:~/git/IO/"]
   path = ~/.config/git/gitconfig-io
 
 [includeIf "gitdir:~/IOHK/"]

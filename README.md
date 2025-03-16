@@ -21,32 +21,50 @@ custom setup.
    ~/.config/oh-my-zsh/tools/install.sh
    ```
    
-3. Ensure your `ZSH_CUSTOM` environment variable was set correctly.
+3. Backup your existing `~/.zshrc` file and replace it with a link to the custom template.
+
+   ```sh
+   cp ~/.zshrc ~/.zshrc.orig
+   ln -s ~/.config/oh-my-zsh/templates/zshrc.wjd-template ~/.zshrc
+   ```
+
+4. Ensure your `ZSH_CUSTOM` environment variable was set correctly.
 
    ```shell
    echo $ZSH_CUSTOM
    ```
    It should show `~/.config/oh-my-zsh/custom`, or similar.
    
-   If not, then probably something went wrong above, but for now you could try to remedy this by invoking
+   If not, then perhaps something went wrong above. For now you could try to remedy this by invoking
    
    ```shell
-   export ZSH_CUSTOM=~/.config/oh-my-zsh/custom
+   export ZSH_CUSTOM=$HOME/.config/oh-my-zsh/custom
    ```
+   Put the line above in your `$HOME/.zshrc` file to make the change permanent.
 
-4. Add autosuggestions and syntax highlighting plugins.
+
+5. Add autosuggestions and syntax highlighting plugins.
 
    ```sh
    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
    ```
+   
+   These plugins will be activated when a new zsh shell is launched assuming you linked the 
+   `zshrc.wjd-template` file to `$HOME/.zshrc` (Step 3 above), since that file includes the following:
+   
+   ```shell
+   source ${ZSH_CUSTOM}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+   source ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-5. Backup your existing `~/.zshrc` file and replace it with a link to the custom template.
-
-   ```sh
-   cp ~/.zshrc ~/.zshrc.orig
-   ln -s ~/.config/oh-my-zsh/templates/zshrc.wjd-template ~/.zshrc
+   plugins=(
+      # <other plugins>
+      zsh-autosuggestions
+      zsh-syntax-highlighting
+   )
    ```
+
+
 
 6. Change your default shell
 
